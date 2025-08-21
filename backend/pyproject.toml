@@ -1,0 +1,12 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.40.14",
+    "dotenv>=0.9.9",
+    "fastapi>=0.116.1",
+    "uvicorn>=0.35.0",
+]
