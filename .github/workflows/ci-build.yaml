@@ -1,0 +1,68 @@
+name: CI/CD
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint (Ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install uv and Python 3.13
+      - name: Setup uv (+ Python 3.13)
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+
+      - name: Ruff check
+        run: uvx ruff check --output-format=github .
+
+  deploy:
+    name: Deploy (Docker Compose on self-hosted)
+    # Deploy only on pushes to main, never on PRs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [ci]
+    runs-on: self-hosted
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Show runner info (sanity check)
+        run: |
+          uname -a || true
+          docker --version || true
+          (docker compose version || docker-compose --version) || true
+
+      # ← Correctly place .env creation inside steps
+      - name: Create .env file from GitHub secrets
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> .env
+
+      - name: Build & (re)start stack via Docker Compose
+        env:
+          DOCKER_BUILDKIT: "0"
+          COMPOSE_DOCKER_CLI_BUILD: "1"
+        run: |
+          set -e
+          docker-compose -f docker-compose.yml down --remove-orphans
+          docker-compose -f docker-compose.yml up -d --build
+          docker-compose -f docker-compose.yml ps
+
+      # Optional: clean up dangling images
+      - name: Prune dangling images
+        run: docker image prune -f || true
