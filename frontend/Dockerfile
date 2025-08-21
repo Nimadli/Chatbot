@@ -1,12 +1,29 @@
-FROM python:3.13-slim
+FROM ghcr.io/astral-sh/uv:bookworm-slim AS builder
 
-WORKDIR app
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_INSTALL_DIR=/python \
+    UV_PYTHON_PREFERENCE=only-managed
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install build dependencies and clean up in the same layer
+RUN apt-get update -y && \
+    apt-get install --no-install-recommends -y clang git && \
+    rm -rf /var/lib/apt/lists/*
 
+WORKDIR /app
+
+# Copy only backend code
 COPY . .
 
+# Install Python dependencies
+RUN uv sync --no-dev
+
+# Set environment variables for production
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# Expose 8501 port
 EXPOSE 8501
 
-CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Run streamlit application 
+CMD ["uv", "run", "streamlit", "run", "streamlit_app.py", "--server.address=0.0.0.0", "--server.port=8501"]
