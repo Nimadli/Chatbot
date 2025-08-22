@@ -55,7 +55,12 @@ jobs:
 
       - name: List files
         run: ls -la
-
+        
+      - name: Debug .env
+        run: |
+          echo "Checking .env contents (secret values hidden)"
+          grep -vE 'AWS_SECRET_ACCESS_KEY|AWS_ACCESS_KEY_ID' .env
+      
       - name: Build & (re)start stack via Docker Compose
         env:
           DOCKER_BUILDKIT: "0"
