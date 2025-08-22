@@ -73,7 +73,9 @@ with chat_container:
 
 # ----------------- Input Form -----------------
 with st.form(key="chat_form", clear_on_submit=True):
-    user_input = st.text_input("Ask something:", key="input", label_visibility="collapsed")
+    user_input = st.text_input(
+        "Ask something:", key="input", label_visibility="collapsed"
+    )
     submitted = st.form_submit_button("Send")
 
 # ----------------- Send Message -----------------
@@ -88,7 +90,9 @@ if submitted and user_input:
             answer = ""
             try:
                 with requests.post(
-                    url, json={"messages": history, "temperature": creativity}, stream=True
+                    url,
+                    json={"messages": history, "temperature": creativity},
+                    stream=True,
                 ) as r:
                     for chunk in r.iter_content(chunk_size=1):
                         if chunk:
