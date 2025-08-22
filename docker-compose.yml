@@ -4,8 +4,10 @@ services:
   backend:
     build:
       context: ./backend
-    env_file:
-    - .env
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     container_name: chatbot-backend
     ports:
       - "8000:8000"
