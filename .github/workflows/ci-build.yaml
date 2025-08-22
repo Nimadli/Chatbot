@@ -49,13 +49,13 @@ jobs:
       # ← Correctly place .env creation inside steps
       - name: Create .env file from GitHub secrets
         run: |
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" > .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
           echo "AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> .env
 
       - name: List files
         run: ls -la
-        
+
       - name: Debug .env
         run: |
           echo "Checking .env contents (secret values hidden)"
