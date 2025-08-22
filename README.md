@@ -26,7 +26,7 @@
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Nimadli/Chatbot.git
-   cd chatbot
+   cd Chatbot
    ```
 
 2. **Create a .env file inside the root folder**
