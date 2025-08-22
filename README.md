@@ -7,6 +7,8 @@
 
 ---
 
+### IP for testing: http://13.222.78.238:8501/
+
 ## Architecture
 
 - **Backend**: FastAPI for ML model serving and API endpoints
