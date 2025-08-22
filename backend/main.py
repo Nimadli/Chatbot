@@ -2,14 +2,11 @@ import boto3
 import json
 import os
 import requests
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from datetime import datetime
-from botocore.exceptions import NoCredentialsError, ClientError
+from botocore.exceptions import ClientError
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
-import uvicorn
 
 # Load environment variables
 load_dotenv()

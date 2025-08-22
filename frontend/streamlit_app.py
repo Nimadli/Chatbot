@@ -1,6 +1,5 @@
 import requests
 import streamlit as st
-import json
 import time
 
 st.set_page_config(page_title="💬 RAG Chatbot", layout="wide")
