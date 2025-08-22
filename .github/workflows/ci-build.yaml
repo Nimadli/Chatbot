@@ -53,6 +53,9 @@ jobs:
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
           echo "AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> .env
 
+      - name: List files
+        run: ls -la
+
       - name: Build & (re)start stack via Docker Compose
         env:
           DOCKER_BUILDKIT: "0"
