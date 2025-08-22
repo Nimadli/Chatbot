@@ -55,7 +55,7 @@ Reproducible ML project scaffold powered by uv
 
 ## Getting started (uv)
 ```bash
-# create venv and sync (will create uv.lock)
+# create venv and sync (will create uv.lock)..
 uv sync
 
 # add a runtime dependency
