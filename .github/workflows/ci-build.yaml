@@ -52,14 +52,6 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" > .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
           echo "AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> .env
-
-      - name: List files
-        run: ls -la
-
-      - name: Debug .env
-        run: |
-          echo "Checking .env contents (secret values hidden)"
-          grep -vE 'AWS_SECRET_ACCESS_KEY|AWS_ACCESS_KEY_ID' .env
       
       - name: Build & (re)start stack via Docker Compose
         env:
