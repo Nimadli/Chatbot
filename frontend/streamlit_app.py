@@ -17,7 +17,7 @@ max_tokens = st.sidebar.slider(
 )
 
 # Backend URL configuration (hardcoded)
-backend_url = "http://localhost:8000"
+backend_url = "http://backend:8000"
 
 if st.sidebar.button("🗑️ Clear Chat"):
     st.session_state.messages = []
